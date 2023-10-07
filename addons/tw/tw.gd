@@ -55,6 +55,7 @@ func tw(v:Node, time:float, property_dict:Dictionary, es := 'linear', ed := 'out
 	if !time or (time == -1.0):		time = default_time 
 	time = max(time, 0.0)
 	
+	
 	var easing:Tween.TransitionType=Tween['TRANS_'+str(es).to_upper()]
 	var direction:Tween.EaseType=Tween['EASE_'+str(ed).to_upper()]
 	
@@ -64,8 +65,9 @@ func tw(v:Node, time:float, property_dict:Dictionary, es := 'linear', ed := 'out
 		timer.one_shot=true
 		add_child(timer)
 		timer.timeout.connect(func():
+			var tween = create_tween()
+			
 			for property in property_dict:
-				var tween = create_tween()
 				tween.tween_property(
 					v,
 					property,
@@ -79,8 +81,9 @@ func tw(v:Node, time:float, property_dict:Dictionary, es := 'linear', ed := 'out
 		return
 	
 	if time>0:
+		var tween=create_tween()
+		
 		for property in property_dict:
-			var tween=create_tween()
 			tween.tween_property(
 				v,
 				property,
