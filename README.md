@@ -16,8 +16,23 @@ tw.tw(
 ```
 
 
+## Configuration:
+```gdscript
+tw.set_default_time(1.0)
+
+tw.set_default_easing(style := '', direction := '')
+tw.set_default_easing('quint')
+tw.set_default_easing('quint', 'out')
+```
+
+
+
 ## Usage:
 ```gdscript
+tw.set_default_time(1.0)
+tw.set_default_easing('quint')
+
+
 tw.tw(self, 1.0, {modulate = Color.RED})
 tw.tw($Node, 1.0, {modulate = Color.RED, rotation = 360}, 'quint', 'out')
 tw.tw(self, 1.0, {modulate = Color.RED, "position:x" = 20}, 'QuiNT', 'OuT')
