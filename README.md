@@ -20,7 +20,7 @@ tw.tw(
 ```gdscript
 tw.set_default_time(1.0)
 
-tw.set_default_easing(style := '', direction := '')
+#tw.set_default_easing(style := '', direction := '')
 tw.set_default_easing('quint')
 tw.set_default_easing('quint', 'out')
 ```
