@@ -66,7 +66,7 @@ func tw(v:Node, time:float, property_dict:Dictionary, es := 'linear', ed := 'out
 		add_child(timer)
 		timer.timeout.connect(func():
 			var tween = create_tween()
-			
+			tween.paralell = true
 			for property in property_dict:
 				tween.tween_property(
 					v,
@@ -82,7 +82,8 @@ func tw(v:Node, time:float, property_dict:Dictionary, es := 'linear', ed := 'out
 	
 	if time>0:
 		var tween=create_tween()
-		
+		tween.set_parallel(true)
+
 		for property in property_dict:
 			tween.tween_property(
 				v,
