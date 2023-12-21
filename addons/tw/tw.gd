@@ -2,7 +2,7 @@ extends Node
 
 
 
-const EASING_STYLES: Array[String]= [
+const EASING_STYLES: Array[String] = [
 	'linear', 'quint', 'elastic', 'sine', 'quart', 'quad', 'expo', 'cubic', 'circ', 'bounce', 'back',
 	'spring'
 ]
