@@ -2,27 +2,27 @@ extends Node
 
 
 
-const EASING_STYLES = [
+const EASING_STYLES: Array[String]= [
 	'linear', 'quint', 'elastic', 'sine', 'quart', 'quad', 'expo', 'cubic', 'circ', 'bounce', 'back',
 	'spring'
 ]
-const EASING_DIRECTIONS = [
+const EASING_DIRECTIONS: Array[String] = [
 	'out', 'in', 'in_out', 'out_in'
 ]
 
 
 
-signal delayed_tw_ended(tween:Tween, delay:float)
+signal delayed_tw_ended(tween: Tween, delay: float)
 
 
-var default_es
-var default_ed
-var default_time 
+var default_es := ''
+var default_ed := ''
+var default_time := 0.0
 
 
 
 
-func set_default_easing(style = 'linear', direction = 'out'):
+func set_default_easing(style = 'linear', direction = 'out') -> void:
 	if !EASING_STYLES.has(style.to_lower()):
 		style = EASING_STYLES[0]
 		printerr(style, ' easing style not found. Set to ' + EASING_STYLES[0])
@@ -34,13 +34,13 @@ func set_default_easing(style = 'linear', direction = 'out'):
 	default_ed = direction
 
 
-func set_default_time(time:float):
+func set_default_time(time: float) -> void:
 	default_time = time
 
 
 
 
-func tw(v:Node, time:float, property_dict:Dictionary, es := 'linear', ed := 'out', delay = null):
+func tw(v: Node, time: float, property_dict: Dictionary, es := 'linear', ed := 'out', delay := -1.0) -> Tween:
 	if !v:			return
 	
 	if !EASING_STYLES.has(es.to_lower()):
@@ -53,46 +53,51 @@ func tw(v:Node, time:float, property_dict:Dictionary, es := 'linear', ed := 'out
 	if es.is_empty():				es = default_es
 	if es.is_empty():				ed = default_ed
 	if !time or (time == -1.0):		time = default_time 
+	
 	time = max(time, 0.0)
 	
 	
-	var easing:Tween.TransitionType=Tween['TRANS_'+str(es).to_upper()]
-	var direction:Tween.EaseType=Tween['EASE_'+str(ed).to_upper()]
+	var easing: Tween.TransitionType = Tween['TRANS_'+str(es).to_upper()]
+	var direction: Tween.EaseType = Tween['EASE_'+str(ed).to_upper()]
 	
-	if delay:
-		var timer=Timer.new()
+	if delay != -1:
+		var timer := Timer.new()
 		timer.wait_time = delay
-		timer.one_shot=true
+		timer.one_shot = true
 		add_child(timer)
-		timer.timeout.connect(func():
-			var tween = create_tween()
-			tween.paralell = true
-			for property in property_dict:
+		
+		var tween := create_tween()
+		tween.set_parallel(true)
+		
+		timer.timeout.connect(func() -> void:
+			for property: String in property_dict:
 				tween.tween_property(
 					v,
 					property,
 					property_dict[property],
 					time
 				).set_ease(direction).set_trans(easing)
-				
-				emit_signal('delayed_tw_ended', tween, delay)
-				timer.queue_free()
-				)
-		return
+			
+			emit_signal('delayed_tw_ended', tween, delay)
+			timer.queue_free()
+		)
+		return tween
 	
-	if time>0:
-		var tween=create_tween()
-		tween.set_parallel(true)
-
-		for property in property_dict:
+	if time > 0:
+		var tween := create_tween()
+		
+		for property: String in property_dict:
 			tween.tween_property(
 				v,
 				property,
-						property_dict[property],
+				property_dict[property],
 				time
 			).set_ease(direction).set_trans(easing)
+			
 			if property_dict.size() == 1:
 				return tween
 	else:
-		for property in property_dict:
+		for property: String in property_dict:
 			v[property] = property_dict[property]
+	
+	return null
